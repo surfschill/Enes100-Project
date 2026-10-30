@@ -5,9 +5,11 @@
 #include "obstacles.h"
 #include "goal.h"
 
+
 void setup() {
     
     visionBegin();
+
 
     
 }
