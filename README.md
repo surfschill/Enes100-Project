@@ -1,4 +1,4 @@
 # Enes100-Project
 OTV Project
 
-Testing Testing
+This is the FIRE Team OTV Project for Fall 2026
