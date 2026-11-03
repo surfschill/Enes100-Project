@@ -10,7 +10,6 @@ void setup() {
     
     visionBegin();
 
-
     
 }
 
