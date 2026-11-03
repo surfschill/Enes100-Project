@@ -6,9 +6,20 @@
 #include "mission.h"     // (or obstacles.h / goal.h — its own header last)
 
 
+void gotoMissionA(){
+x = 0.5;
+y = 1.5;
 
+}
+void gotoMissionB(){
+MissionB_X = 0.5;
+MissionB_Y = 0.5;
+float Angle = atan2(MissionB_Y - getY(), MissionB_X - getX());
+turnToAngle(Angle);
+}
 void goToMission(){
     //... code to go to the mission location
+   
 }
 
 void countCandles(){
