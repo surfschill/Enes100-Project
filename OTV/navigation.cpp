@@ -9,8 +9,8 @@
 void waitForVisible() {
 
 }
-
 void turnToAngle(float targetAngle) {
+float turnAngle = targetAngle - getTheta();
 
 }
 
