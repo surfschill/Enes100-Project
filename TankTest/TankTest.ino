@@ -19,12 +19,12 @@ void goToMission() {
     while (!(Enes100.getTheta() > -1.65 && Enes100.getTheta() < -1.49)) {
       float t = Enes100.getTheta();
 
-      int speed = 140;
+      int speed = 110;
       if (t > -2.0 && t < -1.15) {
       speed = 90;
       }
 
-      if (t > -1.57 && t < 1.57) {
+      if (t <= 0 && t >-1.57 || t >= 0 && t < 1.57) {
         Tank.setLeftMotorPWM(speed);      // right half: turn clockwise
         Tank.setRightMotorPWM(-speed);
       } else {
@@ -47,17 +47,23 @@ void goToMission() {
     Enes100.println("Going to A");
 
     while (!(Enes100.getTheta() > 1.49 && Enes100.getTheta() < 1.65)) {
-      float t = Enes100.getTheta();
-      if (t > -1.57 && t < 1.57) {
-        Tank.setLeftMotorPWM(-180);     // right half: turn counter-clockwise
-        Tank.setRightMotorPWM(180);
-      } else {
-        Tank.setLeftMotorPWM(180);      // left half: turn clockwise
-        Tank.setRightMotorPWM(-180);
-      }
-      delay(20);
-    }
-    Tank.turnOffMotors();
+    float t = Enes100.getTheta();
+
+   int speed = 110;
+    if (t > 1.15 && t < 2.0) {         // close to 1.57 → slow down
+    speed = 90;
+   }
+
+    if (t > -1.57 && t < 1.57) {       // right half → counter-clockwise
+    Tank.setLeftMotorPWM(-speed);
+    Tank.setRightMotorPWM(speed);
+    } else {                           // left half → clockwise
+    Tank.setLeftMotorPWM(speed);
+      Tank.setRightMotorPWM(-speed);
+    } 
+    delay(20);
+}
+Tank.turnOffMotors();
 
     while (Enes100.getY() < 1.2) {      // drive up, stop before A
       Tank.setLeftMotorPWM(200);
@@ -72,7 +78,7 @@ void goToMission() {
 
 void setup() {
   Tank.begin();
-  Enes100.begin("Jersey Mikes", FIRE, 50, 1116, 52, 50);
+  Enes100.begin("Jersey Mikes", FIRE, 52, 1201, 52, 50);
   Enes100.println("Connected");
 }
 
