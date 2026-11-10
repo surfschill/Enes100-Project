@@ -10,6 +10,10 @@ void setMotors(int leftSpeed, int rightSpeed) {
   analogWrite(RIGHT_MOTOR_PIN, rightSpeed);
 }
 
+void StopMotors() {
+  // Stop both motors
+  setMotors(0, 0);
+}
 
 void turnRight(int speed) {
   // Turn the robot right by setting the left motor forward and the right motor backward
