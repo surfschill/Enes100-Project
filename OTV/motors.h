@@ -1,6 +1,5 @@
 #pragma once
+
 void setupMotors();
-void setMotors(int leftSpeed, int rightSpeed);
+void setMotors(int left, int right);
 void stopMotors();
-void turnLeft(int speed);
-void turnRight(int speed);
