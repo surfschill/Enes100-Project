@@ -8,9 +8,15 @@
 
 void setup() {
     
-    visionBegin();
-  
-    
+setupMotors();      // ← missing: set the motor pins as outputs FIRST
+  stopMotors();
+  visionBegin();
+  visionPrint("Setup done");
+  delay(2000);
+
+  goToMission();
+  stopMotors();
+  visionPrint("Finished");
 }
 
 
