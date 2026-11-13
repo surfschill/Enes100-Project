@@ -1,10 +1,16 @@
 #include <Arduino.h>
+#include <Enes100.h>
 #include "config.h"
 #include "vision.h"
 #include "motors.h"
 #include "navigation.h"  // if it calls turnTo() etc.
 #include "mission.h"     // (or obstacles.h / goal.h — its own header last)
 
+void setup() {
+  pinMode(BUTTON1, INPUT_PULLUP);
+  pinMode(BUTTON2, INPUT_PULLUP);
+  pinMode(BUTTON3, INPUT_PULLUP);
+}
 
 void gotoMissionA(){
 x = 0.5;
@@ -21,7 +27,14 @@ void goToMission(){
     //... code to go to the mission location
    
 }
-
+// Button pins for topography detection and Flame sensor pins
+const int BUTTON1 = 2; // CHANGE TO MATCH BUTTON WIRING
+const int BUTTON2 = 3;
+const int BUTTON3 = 4;
+const int FLAME_PINS[]    = {A0, A1, A2, A3, A4}; //CHANGE TO MATCH FLAME SENSOR WIRING
+const int NUM_FLAME_PINS  = sizeof(FLAME_PINS) / sizeof(FLAME_PINS[0]);
+const int FLAME_THRESHOLD = 450;  // lit reads ~40-50, unlit ~850-900 (from tests/ir_sensors.ino)
+const int FLAME_SAMPLES   = 10;   // readings averaged per sensor to smooth out flicker
 // Returns true if the flame sensor on `pin` sees a lit candle.
 // Averages several readings so one flicker doesn't change the count.
 bool isCandleLit(int pin){
@@ -46,14 +59,16 @@ int countCandles(){
 }
 // Topography detection functions
 // Four diff types: TOP_UNKNOWN, TOP_A, TOP_B, TOP_C
+const int TOP_UNKNOWN = -1; //our own "no match" value
 Topography matchTopography(int b1, int b2, int b3) {
     // HIGH = 1, LOW = 0
-  if (b1 == HIGH && b2 == HIGH && b3 == LOW)  return TOP_A;
-  if (b1 == HIGH && b2 == LOW  && b3 == LOW)  return TOP_B;
-  if (b1 == HIGH && b2 == HIGH && b3 == HIGH) return TOP_C;
+    //returns the library's TOP_A/TOP_B/TOP_C if a match is found, otherwise TOP_UNKNOWN
+  if (b1 == HIGH && b2 == HIGH && b3 == LOW)  return TOP_A; // 1,1,0
+  if (b1 == HIGH && b2 == LOW  && b3 == LOW)  return TOP_B; // 1,0,0
+  if (b1 == HIGH && b2 == HIGH && b3 == HIGH) return TOP_C; // 1,1,1
   return TOP_UNKNOWN;
 }
-// reads the button pin values and returns results to matchtopography function
+// reads the 3 button values and passes them to matchTopography
 Topography detectTopography() {
   int b1 = digitalRead(BUTTON1);
   int b2 = digitalRead(BUTTON2);
