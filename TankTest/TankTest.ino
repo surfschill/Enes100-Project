@@ -72,7 +72,7 @@ void goToMission() {
 
 void setup() {
   Tank.begin();
-  Enes100.begin("Jersey Mikes", FIRE, 50, 1116, 52, 50);
+  Enes100.begin("Jersey Mikes", FIRE, 137, 1201, 52, 50);
   Enes100.println("Connected");
 }
 

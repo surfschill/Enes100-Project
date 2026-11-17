@@ -2,6 +2,7 @@
 void goToMission();
 void goToMissionA();
 void goToMissionB();
-void countCandles();
+bool isCandleLit(int pin);
+int  countCandles();
 void findTopography();
 void doMission();
