@@ -102,6 +102,47 @@ void goToMissionB() {
   visionPrint("Going to B");
   turnToFaceB();
   driveDownTo(MISSION_B_STOP_Y);
+}
+
+
+
+// Pick the site on the opposite side from where we start.
+void goToMission() {
+  waitForVisible();
+
+  if (getY() > 1.0) {
+    goToMissionB();     // started at A
+  } else {
+    goToMissionA();     // started at B
+  }
+
+  visionPrint("At mission site");
+}
+
+
+
+
+////After this is the detection for the fire and topography, and the sending of the results to the vision system
+
+// Topography detection functions
+// Four diff types: TOP_UNKNOWN, TOP_A, TOP_B, TOP_C
+const int TOP_UNKNOWN = -1; //our own "no match" value
+Topography matchTopography(int b1, int b2, int b3) {
+    // HIGH = 1, LOW = 0
+    //returns the library's TOP_A/TOP_B/TOP_C if a match is found, otherwise TOP_UNKNOWN
+  if (b1 == HIGH && b2 == HIGH && b3 == LOW)  return TOP_A; // 1,1,0
+  if (b1 == HIGH && b2 == LOW  && b3 == LOW)  return TOP_B; // 1,0,0
+  if (b1 == HIGH && b2 == HIGH && b3 == HIGH) return TOP_C; // 1,1,1
+  return TOP_UNKNOWN;
+}
+// reads the 3 button values and passes them to matchTopography
+Topography detectTopography() {
+  int b1 = digitalRead(BUTTON1);
+  int b2 = digitalRead(BUTTON2);
+  int b3 = digitalRead(BUTTON3);
+  return matchTopography(b1, b2, b3);
+}
+
 // Button pins for topography detection and Flame sensor pins
 const int BUTTON1 = 2; // CHANGE TO MATCH BUTTON WIRING
 const int BUTTON2 = 3;
@@ -132,55 +173,11 @@ int countCandles(){
     }
     return count;
 }
-// Topography detection functions
-// Four diff types: TOP_UNKNOWN, TOP_A, TOP_B, TOP_C
-const int TOP_UNKNOWN = -1; //our own "no match" value
-Topography matchTopography(int b1, int b2, int b3) {
-    // HIGH = 1, LOW = 0
-    //returns the library's TOP_A/TOP_B/TOP_C if a match is found, otherwise TOP_UNKNOWN
-  if (b1 == HIGH && b2 == HIGH && b3 == LOW)  return TOP_A; // 1,1,0
-  if (b1 == HIGH && b2 == LOW  && b3 == LOW)  return TOP_B; // 1,0,0
-  if (b1 == HIGH && b2 == HIGH && b3 == HIGH) return TOP_C; // 1,1,1
-  return TOP_UNKNOWN;
-}
-// reads the 3 button values and passes them to matchTopography
-Topography detectTopography() {
-  int b1 = digitalRead(BUTTON1);
-  int b2 = digitalRead(BUTTON2);
-  int b3 = digitalRead(BUTTON3);
-  return matchTopography(b1, b2, b3);
-}
+
 // Reports mission results
 void sendMissionResults(int candles, int topography) {
   Enes100.mission(NUM_CANDLES, candles);
   if (topography != TOPO_UNKNOWN) {
     Enes100.mission(TOPOGRAPHY, topography);
   }
-}
-
-// Pick the site on the opposite side from where we start.
-void goToMission() {
-  waitForVisible();
-
-  if (getY() > 1.0) {
-    goToMissionB();     // started at A
-  } else {
-    goToMissionA();     // started at B
-  }
-
-  visionPrint("At mission site");
-}
-
-//mission tasks 
-
-void countCandles() {
-  // ... code to count candles
-}
-
-void findTopography() {
-  // ... code to find topography
-}
-
-void doMission() {
-  // ... code to do the mission
 }
