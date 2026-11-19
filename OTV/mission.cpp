@@ -13,20 +13,33 @@ void setup() {
 }
 
 void gotoMissionA(){
-x = 0.5;
-y = 1.5;
+MissionA_X = 0.5;
+MissionA_Y = 1.5;
+float Angle = atan2(MissionA_Y - Enes100.getY(), MissionA_X - Enes100.getX());
+turnToAngle(Angle);
 
 }
 void gotoMissionB(){
 MissionB_X = 0.5;
 MissionB_Y = 0.5;
-float Angle = atan2(MissionB_Y - getY(), MissionB_X - getX());
+float Angle = atan2(MissionB_Y - Enes100.getY(), MissionB_X - Enes100.getX());
 turnToAngle(Angle);
+
 }
 void goToMission(){
     //... code to go to the mission location
-   
+      if (Enes100.getY() > 1.0) {
+        // OTV starts at Mission A
+        gotoMissionB();
+
+    } else {
+
+        // OTV starts at Mission B
+        gotoMissionA();
+
+    }
 }
+
 // Button pins for topography detection and Flame sensor pins
 const int BUTTON1 = 2; // CHANGE TO MATCH BUTTON WIRING
 const int BUTTON2 = 3;
@@ -86,3 +99,4 @@ void sendMissionResults(int candles, int topography) {
 void doMission(){
     //... code to do the mission
 }
+

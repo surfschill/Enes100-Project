@@ -11,15 +11,18 @@ int ENES100state() {
   return Enes100.state(); }
   // Initialize ENES100 for Arduino Uno R4 Wifi
 void visionBegin() {
-  Enes100.begin("Jersey Mikes", FIRE, 137, 1201); //For Arduino Uno R4: team name, mission, room num, aruco id) 
-  Enes100.println("Starting ENES100 Vision System...");}
+  Enes100.begin(TEAM_NAME, FIRE, MARKER_ID, ROOM); //For Arduino Uno R4: team name, mission, room num, aruco id) 
+  Enes100.println("Starting Jersey Mikes Vision System...");}
 // Check if Aruco Marker is visible
-bool isVisible() { 
-  return Enes100.isVisible(); }
-// Retrieve OTV coordinates
-float getX()      { return Enes100.getX(); }
-float getY()      { return Enes100.getY(); }
-float getTheta()  { return Enes100.getTheta(); }
+void waitforVisible() {
+  while (!Enes100.isVisible()) {
+    delay(100); // Wait until the ArUco marker is visible
+  }
+  // Check if the marker is visible
+  if (Enes100.isVisible()) {
+    Enes100.println("ArUco marker detected! Jersey Mikes is visible.");
+  }
+}
 // Print message to ENES100 serial monitor
 void visionPrint(const char* msg) {
   Enes100.println(msg);
